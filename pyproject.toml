@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "telegram-ai-bot"
+version = "1.0.0"
+description = "Telegram-бот с ответами через LLM (OpenAI-совместимый API)"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "aiogram>=3.22,<4",
+    "httpx>=0.27,<1",
+    "python-dotenv>=1.0,<2",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.3", "pytest-asyncio>=1.0", "ruff>=0.9"]
+
+[project.scripts]
+telegram-ai-bot = "app.main:run"
+
+[tool.setuptools]
+packages = ["app"]
+
+# ------------------------------------------------------------------ pytest
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+addopts = "-q"
+
+# -------------------------------------------------------------------- ruff
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+exclude = [".venv", "build", "dist"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "C4", "SIM", "RET", "ASYNC", "RUF"]
+# RUF001-003: в проекте русские тексты, похожие латинские/кириллические символы — норма.
+ignore = ["RUF001", "RUF002", "RUF003"]
+
+[tool.ruff.lint.per-file-ignores]
+# В тестах поддельная сессия повторяет сигнатуру aiogram (с параметром timeout).
+"tests/*" = ["ASYNC109"]
+
+[tool.ruff.format]
+quote-style = "double"

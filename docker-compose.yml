@@ -1,0 +1,24 @@
+services:
+  bot:
+    build: .
+    image: telegram-ai-bot
+    container_name: telegram-ai-bot
+    restart: unless-stopped
+    env_file: .env
+    # Если LLM крутится на хосте (например, Ollama), раскомментируйте:
+    # extra_hosts:
+    #   - "host.docker.internal:host-gateway"
+    # и укажите в .env BASE_URL=http://host.docker.internal:11434/v1
+
+  # Локальная модель без облачных API (опционально):
+  # ollama:
+  #   image: ollama/ollama
+  #   container_name: ollama
+  #   restart: unless-stopped
+  #   ports:
+  #     - "11434:11434"
+  #   volumes:
+  #     - ollama:/root/.ollama
+
+# volumes:
+#   ollama:
